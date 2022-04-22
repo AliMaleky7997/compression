@@ -36,3 +36,12 @@ ipython_config.py
 .AppleDouble
 .LSOverride
 ._*
+
+# my added files
+out/
+evaluation_images/
+ckpts/
+lpips_weight__net-lin_alex_v0.1.pb
+out_generic_hific/
+out_hific_lsun/
+temp.py

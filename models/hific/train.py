@@ -18,6 +18,15 @@ import argparse
 import sys
 
 import tensorflow.compat.v1 as tf
+# from tensorflow.compat.v1 import ConfigProto
+# from tensorflow.compat.v1 import InteractiveSession
+
+# config = ConfigProto()
+# config.gpu_options.allow_growth = True
+# session = InteractiveSession(config=config)
+physical_devices = tf.config.experimental.list_physical_devices('GPU')
+assert len(physical_devices) > 0, "Not enough GPU hardware devices available"
+config = tf.config.experimental.set_memory_growth(physical_devices[0], True)
 
 from hific import configs
 from hific import helpers
@@ -37,8 +46,14 @@ def train(config_name, ckpt_dir, num_steps: int, auto_encoder_ckpt_dir,
   hific = model.HiFiC(config, helpers.ModelMode.TRAINING, lpips_weight_path,
                       auto_encoder_ckpt_dir, create_image_summaries)
 
+  # these lines are changed. I added images_glob to the arguments in order to fine-tune on lsun
+  # images_glob = '/home/malekya/lsun/lsun/lsun_bedroom_images/*.webp'
+  # images_glob = '/home/malekya/lsun/lsun/lsun_bedroom_validation/*.webp'
+  
+
   dataset = hific.build_input(batch_size, crop_size,
-                              tfds_arguments=tfds_arguments)
+                              tfds_arguments=tfds_arguments, images_glob=images_glob)
+
   iterator = tf.data.make_one_shot_iterator(dataset)
   get_next = iterator.get_next()
 
@@ -59,7 +74,9 @@ def train(config_name, ckpt_dir, num_steps: int, auto_encoder_ckpt_dir,
     while True:
       if sess.should_stop():
         break
+
       global_step_np, _ = sess.run([global_step, train_op])
+
       if global_step_np == 0:
         tf.logging.info('First iteration passed.')
       if global_step_np > 1 and global_step_np % 100 == 1:

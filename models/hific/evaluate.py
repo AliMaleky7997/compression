@@ -49,6 +49,10 @@ def eval_trained_model(config_name,
   hific = model.HiFiC(config, helpers.ModelMode.EVALUATION)
 
   # Note: Automatically uses the validation split for TFDS.
+  # images_glob = '/home/malekya/compression/compression/models/hific/girl.png'
+  # images_glob = '/home/malekya/lsun/lsun/lsun_bedroom_validation/*.webp'
+  images_glob = '/home/malekya/compression/compression/models/evaluation_images/IMG_0196.png'
+  # images_glob = None
   dataset = hific.build_input(
       batch_size=1,
       crop_size=None,
@@ -71,6 +75,9 @@ def eval_trained_model(config_name,
     hific.restore_trained_model(sess, ckpt_dir)
     hific.prepare_for_arithmetic_coding(sess)
 
+    with open(os.path.join(out_dir, 'metrics.txt'), 'w+') as file_object:
+      pass # Just create the file and empty it in case it's not already.
+
     for i in itertools.count(0):
       if max_images and i == max_images:
         break
@@ -89,6 +96,9 @@ def eval_trained_model(config_name,
         metrics_str = ' / '.join(f'{metric}: {value:.5f}'
                                  for metric, value in metrics.items())
         print(f'Image {i: 4d}: {metrics_str}, saving in {out_dir}...')
+
+        with open(os.path.join(out_dir, 'metrics.txt'), "a") as file_object:
+          file_object.write(f'Image {i: 4d}: {metrics_str}\n')
 
         for metric, value in metrics.items():
           accumulated_metrics[metric].append(value)

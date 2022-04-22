@@ -83,6 +83,7 @@ def instantiate_model_signature(model, signature, inputs=None, outputs=None):
   wrapped_import = tf.compat.v1.wrap_function(
       lambda: tf.compat.v1.train.import_meta_graph(metagraph), [])
   graph = wrapped_import.graph
+
   if inputs is None:
     inputs = metagraph.signature_def[signature].inputs
     inputs = [graph.as_graph_element(inputs[k].name) for k in sorted(inputs)]

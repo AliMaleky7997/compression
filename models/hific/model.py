@@ -304,7 +304,7 @@ class HiFiC(object):
         tf.logging.info(
             f"Using images_glob={images_glob} ({len(images)} images)")
         filenames = tf.data.Dataset.from_tensor_slices(images)
-        dataset = filenames.map(lambda x: tf.image.decode_png(tf.read_file(x)))
+        dataset = filenames.map(lambda x: tf.image.decode_png(tf.read_file(x), channels=3)) #TODO: I added channels=3
       else:
         tf.logging.info(f"Using TFDS={tfds_arguments}")
         builder = tfds.builder(
