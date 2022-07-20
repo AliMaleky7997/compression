@@ -47,6 +47,8 @@ def train(config_name, ckpt_dir, num_steps: int, auto_encoder_ckpt_dir,
                       auto_encoder_ckpt_dir, create_image_summaries)
 
   # these lines are changed. I added images_glob to the arguments in order to fine-tune on lsun
+  images_glob = None
+  images_glob = '/home/malekya/compression/SPEEDplus/processed/*/train/*.jpg' # SPEEDplus train set. Processed to patches of 512x512 filtering black patches.
   # images_glob = '/home/malekya/lsun/lsun/lsun_bedroom_images/*.webp'
   # images_glob = '/home/malekya/lsun/lsun/lsun_bedroom_validation/*.webp'
   
@@ -63,11 +65,14 @@ def train(config_name, ckpt_dir, num_steps: int, auto_encoder_ckpt_dir,
   hooks = hific.hooks + [tf.train.StopAtStepHook(last_step=num_steps)]
   global_step = tf.train.get_or_create_global_step()
   tf.logging.info(f'\nStarting MonitoredTrainingSession at {ckpt_dir}\n')
-
+  # print("injaaaaa")
   with tf.train.MonitoredTrainingSession(
       checkpoint_dir=ckpt_dir,
       save_checkpoint_steps=SAVE_CHECKPOINT_STEPS,
       hooks=hooks) as sess:
+    # print("khodafez", ckpt_dir, SAVE_CHECKPOINT_STEPS)
+    # print(hooks)
+    # exit(0)
     if auto_encoder_ckpt_dir:
       hific.restore_autoencoder(sess)
     tf.logging.info('Session setup, starting training...')

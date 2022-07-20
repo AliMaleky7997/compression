@@ -301,6 +301,8 @@ class HiFiC(object):
     with tf.name_scope("tfds"):
       if images_glob:
         images = sorted(glob.glob(images_glob))
+        import random
+        random.shuffle(images) #TODO: I added this shuffling step to avoid patches from the same photo to be consecutive 
         tf.logging.info(
             f"Using images_glob={images_glob} ({len(images)} images)")
         filenames = tf.data.Dataset.from_tensor_slices(images)
@@ -390,7 +392,8 @@ class HiFiC(object):
     self.build_transforms()
 
     if self.training:
-      self._lpips_loss = LPIPSLoss(self._lpips_weight_path)
+      if self._lpips_loss_weight != 0.: #TODO: I added this whole if to avoid loading LPIPS network if the weights are set to zero.
+        self._lpips_loss = LPIPSLoss(self._lpips_weight_path)
       self._lpips_loss_weight = self._config.loss_config.lpips_weight
 
     if self._setup_discriminator:
@@ -702,7 +705,7 @@ class HiFiC(object):
       else:
         loss_enc_dec_entropy = rd_loss
 
-      if self._lpips_loss is not None:
+      if self._lpips_loss is not None and self._lpips_loss_weight != 0.: #TODO: I added this "and ..."" just to avoid computing LPIPS if not used.
         tf.logging.info("Using LPIPS...")
         perceptual_loss = self._compute_perceptual_loss(nodes)
         weighted_perceptual_loss = \

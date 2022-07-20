@@ -1,0 +1,3 @@
+python -m hific.evaluate --config hific_hi_nolpips --ckpt_dir ckpts/open_images/no_lpips/hific_hi --out_dir out/open_images/no_lpips/hific_hi --tfds_dataset_name SPEEDplus
+python -m hific.evaluate --config hific_mi_nolpips --ckpt_dir ckpts/open_images/no_lpips/hific_mi --out_dir out/open_images/no_lpips/hific_mi --tfds_dataset_name SPEEDplus
+python -m hific.evaluate --config hific_lo_nolpips --ckpt_dir ckpts/open_images/no_lpips/hific_lo --out_dir out/open_images/no_lpips/hific_lo --tfds_dataset_name SPEEDplus

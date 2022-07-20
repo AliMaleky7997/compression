@@ -52,6 +52,11 @@ def eval_trained_model(config_name,
   # images_glob = '/home/malekya/compression/compression/models/hific/girl.png'
   # images_glob = '/home/malekya/lsun/lsun/lsun_bedroom_validation/*.webp'
   images_glob = '/home/malekya/compression/compression/models/evaluation_images/IMG_0196.png'
+  images_glob = '/home/malekya/compression/SPEEDplus/processed/*/validation/*.jpg' # SPEEDplus validation set. Processed to patches of 512x512 filtering black patches.
+  images_glob = '/home/malekya/compression/SPEEDplus/selected_evaluation/*/*.jpg' # SPEEDplus validation set. Processed to patches of 512x512 filtering black patches.
+  # images_glob = '/home/malekya/compression/SPEEDplus/evaluation_fullsize/*/*.jpg'
+  # images_glob = '/home/malekya/compression/SPEEDplus/evaluation_fullsize_small/*/*.jpg'
+
   # images_glob = None
   dataset = hific.build_input(
       batch_size=1,
@@ -116,6 +121,8 @@ def eval_trained_model(config_name,
 
   print('\n'.join(f'{metric}: {np.mean(values)}'
                   for metric, values in accumulated_metrics.items()))
+  with open(os.path.join(out_dir, 'metrics.txt'), "a") as file_object:
+          file_object.write('\n'.join(f'{metric}: {np.mean(values)}' for metric, values in accumulated_metrics.items()))
   print('Done!')
 
 

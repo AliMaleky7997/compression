@@ -1,0 +1,17 @@
+python -m hific.train --config hific_mi_nolpips --ckpt_dir ckpts/open_images/no_lpips/hific_mi --init_autoencoder_from_ckpt_dir ckpts/open_images/no_lpips/mse_lpips_mi --num_steps 1M --tfds_dataset_name open_images_v4
+
+python -m hific.train --config mselpips_mi_nolpips --ckpt_dir ckpts/open_images/no_lpips/mse_lpips_mi --num_steps 1M --tfds_dataset_name open_images_v4
+
+
+python -m hific.train --config hific_mi_nolpips --ckpt_dir ckpts/open_images/no_lpips/hific_mi_finetune_speedplus_bpp_0_15 --init_autoencoder_from_ckpt_dir ckpts/open_images/no_lpips/mse_lpips_mii --num_steps 2M --tfds_dataset_name SPEEDplus
+
+
+python -m hific.train --config hific_lo_nolpips --ckpt_dir ckpts/open_images/no_lpips/hific_lo_finetune_speedplus_bpp_0_07  --num_steps 2M --tfds_dataset_name SPEEDplus
+python -m hific.train --config hific_mi_nolpips --ckpt_dir ckpts/open_images/no_lpips/hific_mi_finetune_speedplus_bpp_0_15  --num_steps 2M --tfds_dataset_name SPEEDplus
+python -m hific.train --config hific_hi_nolpips --ckpt_dir ckpts/open_images/no_lpips/hific_hi_finetune_speedplus_bpp_0_22  --num_steps 2M --tfds_dataset_name SPEEDplus
+
+python -m hific.train --config hific_hi_nolpips --ckpt_dir ckpts/open_images/no_lpips/hific_hi_finetune_speedplus_bpp_0_45  --num_steps 2M --tfds_dataset_name SPEEDplus
+python -m hific.train --config hific_mi_nolpips --ckpt_dir ckpts/open_images/no_lpips/hific_mi_finetune_speedplus_bpp_0_30  --num_steps 2M --tfds_dataset_name SPEEDplus
+
+
+python -m hific.evaluate --config hific_mi_nolpips --ckpt_dir ckpts/open_images/no_lpips/hific_mi_finetune_speedplus_bpp_0_15 --out_dir out/open_images/no_lpips/hific_mi_finetune_speedplus_bpp_0_15 --tfds_dataset_name SPEEDplus
